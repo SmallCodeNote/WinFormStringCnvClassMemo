@@ -167,13 +167,13 @@ namespace WinFormStringCnvClass
 
         static private string toEscape(string text)
         {
-            return text.Replace("\t", @"\\t").Replace("\r", @"\\r").Replace("\n", @"\\n");
+            return text.Replace("\t", @"\\t\\").Replace("\r", @"\\r\\").Replace("\n", @"\\n\\");
         }
 
 
         static private string deEscape(string text)
         {
-            return text.Replace(@"\\t", "\t").Replace(@"\\r", "\r").Replace(@"\\n", "\n");
+            return text.Replace(@"\\t\\", "\t").Replace(@"\\r\\", "\r").Replace(@"\\n\\", "\n");
         }
 
 
