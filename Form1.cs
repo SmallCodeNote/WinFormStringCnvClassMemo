@@ -19,6 +19,7 @@ namespace GetWinform
         public Form1()
         {
             InitializeComponent();
+            thisExeDirPath = Path.GetDirectoryName(Application.ExecutablePath);
 
         }
 
