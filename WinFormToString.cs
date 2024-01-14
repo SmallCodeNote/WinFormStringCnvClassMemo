@@ -14,20 +14,21 @@ namespace WinFormStringCnvClass
         /// </summary>
         /// <param name="_form">winform object</param>
         /// <returns></returns>
-        static public string ToString(Form _form) {
+        static public string ToString(Form _form)
+        {
 
             Dictionary<string, Control> ControlDic = new Dictionary<string, Control>();
-            CreateControlDictionary(_form,ControlDic);
+            CreateControlDictionary(_form, ControlDic);
 
             List<string> Lines = new List<string>();
 
             foreach (var d in ControlDic)
             {
                 string Line = ControlToString(d.Value);
-                if(Line.Length>0) Lines.Add(Line);
+                if (Line.Length > 0) Lines.Add(Line);
             }
 
-            return string.Join("\r\n",Lines);
+            return string.Join("\r\n", Lines);
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace WinFormStringCnvClass
         /// </summary>
         /// <param name="_form">winform object</param>
         /// <param name="str">target control information list</param>
-        static public void setControlFromString(Form _form,string strLines)
+        static public void setControlFromString(Form _form, string strLines)
         {
             Dictionary<string, Control> ControlDic = new Dictionary<string, Control>();
             CreateControlDictionary(_form, ControlDic);
@@ -46,7 +47,7 @@ namespace WinFormStringCnvClass
             {
                 string[] cols = s.Split('\t');
 
-                if (cols[0].Length > 0)
+                if (cols[0].Length > 0 && ControlDic.ContainsKey(cols[0]))
                 {
                     setControlFromString(ControlDic[cols[0]], s.Replace(cols[0] + "\t", ""));
                 }
@@ -66,9 +67,13 @@ namespace WinFormStringCnvClass
             {
                 if (cc.Name.Length > 0)
                 {
-                    ControlDic.Add(cc.Name, cc);
-                    if (cc.Controls.Count > 0)
-                        CreateControlDictionary(cc, ControlDic);
+                    try
+                    {
+                        ControlDic.Add(cc.Name, cc);
+                        if (cc.Controls.Count > 0)
+                            CreateControlDictionary(cc, ControlDic);
+                    }
+                    catch { }
                 }
             }
             return;
@@ -100,6 +105,7 @@ namespace WinFormStringCnvClass
         /// <param name="value"></param>
         static void setControlFromString(Control c, string value)
         {
+
             if (c is TextBox) ((TextBox)c).Text = deEscape(value);
             else if (c is ListBox) ((ListBox)c).Text = deEscape(value);
             else if (c is ComboBox) ((ComboBox)c).Text = deEscape(value);
@@ -108,6 +114,7 @@ namespace WinFormStringCnvClass
             else if (c is DataGridView) setDataGridViewFromString((DataGridView)c, value);
             else if (c is CheckBox) ((CheckBox)c).Checked = bool.Parse(value);
             else if (c is RadioButton) ((RadioButton)c).Checked = bool.Parse(value);
+
 
             return;
         }
@@ -136,9 +143,9 @@ namespace WinFormStringCnvClass
                         Line += "\t" + Value;
                     }
                     catch { }
-                    }
+                }
 
-                if(Value.Length>0) Lines.Add(Line);
+                if (Value.Length > 0) Lines.Add(Line);
             }
 
             return string.Join("\r\n", Lines);
@@ -150,7 +157,7 @@ namespace WinFormStringCnvClass
         /// </summary>
         /// <param name="c">Target DataGridView</param>
         /// <param name="Line">rows contents string</param>
-        static private void setDataGridViewFromString(DataGridView c,string Line)
+        static private void setDataGridViewFromString(DataGridView c, string Line)
         {
             string[] cols = Line.Split('\t');
 
