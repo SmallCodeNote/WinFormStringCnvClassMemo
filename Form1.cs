@@ -27,7 +27,7 @@ namespace GetWinform
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "TEXT|*.txt";
-            if (ofd.ShowDialog() == DialogResult.OK){
+            if (false && ofd.ShowDialog() == DialogResult.OK){
             WinFormStringCnv.setControlFromString(this, File.ReadAllText(ofd.FileName));
             }else{
             string paramFilename = Path.Combine(thisExeDirPath, "_param.txt");
@@ -46,7 +46,7 @@ namespace GetWinform
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "TEXT|*.txt";
 
-            if (sfd.ShowDialog() == DialogResult.OK) {
+            if (false && sfd.ShowDialog() == DialogResult.OK) {
 
             File.WriteAllText(sfd.FileName, FormContents);
             }else{
