@@ -110,18 +110,16 @@ namespace WinFormStringCnvClass
         /// <param name="value"></param>
         static void setControlFromString(Control c, string value)
         {
-            try
-            {
-                if (c is TextBox) ((TextBox)c).Text = deEscape(value);
-                else if (c is ListBox) ((ListBox)c).Text = deEscape(value);
-                else if (c is ComboBox) ((ComboBox)c).Text = deEscape(value);
-                else if (c is NumericUpDown) ((NumericUpDown)c).Value = decimal.Parse(value);
-                else if (c is TrackBar) ((TrackBar)c).Value = int.Parse(value);
-                else if (c is DataGridView) setDataGridViewFromString((DataGridView)c, value);
-                else if (c is CheckBox) ((CheckBox)c).Checked = bool.Parse(value);
-                else if (c is RadioButton) ((RadioButton)c).Checked = bool.Parse(value);
-            }
-            catch { }
+
+            if (c is TextBox) ((TextBox)c).Text = deEscape(value);
+            else if (c is ListBox) ((ListBox)c).Text = deEscape(value);
+            else if (c is ComboBox) ((ComboBox)c).Text = deEscape(value);
+            else if (c is NumericUpDown) ((NumericUpDown)c).Value = decimal.Parse(value);
+            else if (c is TrackBar) ((TrackBar)c).Value = int.Parse(value);
+            else if (c is DataGridView) setDataGridViewFromString((DataGridView)c, value);
+            else if (c is CheckBox) ((CheckBox)c).Checked = bool.Parse(value);
+            else if (c is RadioButton) ((RadioButton)c).Checked = bool.Parse(value);
+
 
             return;
         }
@@ -148,7 +146,14 @@ namespace WinFormStringCnvClass
                     {
                         if (c[Col.Index, Row.Index].Value == null)
                         {
-                            Value = "";
+                            if (c[Col.Index, Row.Index].OwningColumn is DataGridViewCheckBoxColumn)
+                            {
+                                Value = "False";
+                            }
+                            else
+                            {
+                                Value = "";
+                            }
                         }
                         else
                         {
@@ -183,6 +188,8 @@ namespace WinFormStringCnvClass
             for (int i = 0; i < cols.Length; i++)
             {
                 cols[i] = deEscape(cols[i]);
+
+
             }
 
             c.Rows.Add(cols);
