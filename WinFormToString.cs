@@ -18,7 +18,6 @@ namespace WinFormStringCnvClass
         /// <returns></returns>
         static public string ToString(Form _form)
         {
-
             Dictionary<string, Control> ControlDic = new Dictionary<string, Control>();
             CreateControlDictionary(_form, ControlDic);
 
@@ -67,18 +66,21 @@ namespace WinFormStringCnvClass
         {
             foreach (Control cc in c.Controls)
             {
-                if (cc.Name.Length > 0)
+                try
                 {
-                    try
+                    if (cc.Name.Length > 0 && !ControlDic.ContainsKey(cc.Name))
                     {
                         ControlDic.Add(cc.Name, cc);
-                        if (cc.Controls.Count > 0)
-                            CreateControlDictionary(cc, ControlDic);
                     }
-                    catch (Exception ex)
+
+                    if (cc.Controls.Count > 0)
                     {
-                        Debug.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name + " " + ex.ToString());
+                        CreateControlDictionary(cc, ControlDic);
                     }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().Name + " " + ex.ToString());
                 }
             }
             return;
@@ -188,7 +190,6 @@ namespace WinFormStringCnvClass
             for (int i = 0; i < cols.Length; i++)
             {
                 cols[i] = deEscape(cols[i]);
-
 
             }
 
