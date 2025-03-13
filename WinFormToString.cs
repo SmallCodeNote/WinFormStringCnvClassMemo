@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -101,6 +101,7 @@ namespace WinFormStringCnvClass
             if (c is DataGridView) return DataGridViewToString((DataGridView)c);
             if (c is CheckBox) return c.Name + "\t" + ((CheckBox)c).Checked.ToString();
             if (c is RadioButton) return c.Name + "\t" + ((RadioButton)c).Checked.ToString();
+            if (c is DateTimePicker) return c.Name + "\t" + ((DateTimePicker)c).Value.ToString();
 
             return "";
         }
@@ -112,7 +113,6 @@ namespace WinFormStringCnvClass
         /// <param name="value"></param>
         static void setControlFromString(Control c, string value)
         {
-
             if (c is TextBox) ((TextBox)c).Text = deEscape(value);
             else if (c is ListBox) ((ListBox)c).Text = deEscape(value);
             else if (c is ComboBox) ((ComboBox)c).Text = deEscape(value);
@@ -121,7 +121,7 @@ namespace WinFormStringCnvClass
             else if (c is DataGridView) setDataGridViewFromString((DataGridView)c, value);
             else if (c is CheckBox) ((CheckBox)c).Checked = bool.Parse(value);
             else if (c is RadioButton) ((RadioButton)c).Checked = bool.Parse(value);
-
+            else if (c is DateTimePicker) ((DateTimePicker)c).Value=DateTime.Parse(value);
 
             return;
         }
