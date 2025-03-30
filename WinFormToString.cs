@@ -33,6 +33,27 @@ namespace WinFormStringCnvClass
         }
 
         /// <summary>
+        /// Controls to String
+        /// </summary>
+        /// <param name="_userControl">userControl object</param>
+        /// <returns></returns>
+        static public string ToString(UserControl _userControl)
+        {
+            Dictionary<string, Control> ControlDic = new Dictionary<string, Control>();
+            CreateControlDictionary(_userControl, ControlDic);
+
+            List<string> Lines = new List<string>();
+
+            foreach (var d in ControlDic)
+            {
+                string Line = ControlToString(d.Value);
+                if (Line.Length > 0) Lines.Add(Line);
+            }
+
+            return string.Join("\r\n", Lines);
+        }
+
+        /// <summary>
         /// setControlFromString
         /// </summary>
         /// <param name="_form">winform object</param>
@@ -41,6 +62,31 @@ namespace WinFormStringCnvClass
         {
             Dictionary<string, Control> ControlDic = new Dictionary<string, Control>();
             CreateControlDictionary(_form, ControlDic);
+
+            string[] Lines = strLines.Replace("\r\n", "\n").Split('\n');
+
+            foreach (string s in Lines)
+            {
+                string[] cols = s.Split('\t');
+
+                if (cols[0].Length > 0 && ControlDic.ContainsKey(cols[0]))
+                {
+                    setControlFromString(ControlDic[cols[0]], s.Replace(cols[0] + "\t", ""));
+                }
+            }
+
+            return;
+        }
+
+        /// <summary>
+        /// setControlFromString
+        /// </summary>
+        /// <param name="_userControl">userControl object</param>
+        /// <param name="str">target control information list</param>
+        static public void setControlFromString(UserControl _userControl, string strLines)
+        {
+            Dictionary<string, Control> ControlDic = new Dictionary<string, Control>();
+            CreateControlDictionary(_userControl, ControlDic);
 
             string[] Lines = strLines.Replace("\r\n", "\n").Split('\n');
 
@@ -121,7 +167,7 @@ namespace WinFormStringCnvClass
             else if (c is DataGridView) setDataGridViewFromString((DataGridView)c, value);
             else if (c is CheckBox) ((CheckBox)c).Checked = bool.Parse(value);
             else if (c is RadioButton) ((RadioButton)c).Checked = bool.Parse(value);
-            else if (c is DateTimePicker) ((DateTimePicker)c).Value=DateTime.Parse(value);
+            else if (c is DateTimePicker) ((DateTimePicker)c).Value = DateTime.Parse(value);
 
             return;
         }
